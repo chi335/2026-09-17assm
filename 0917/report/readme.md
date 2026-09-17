@@ -1199,7 +1199,7 @@ val1 DWORD -10    ; 오류 없이 정상 컴파일됨 (메모리에는 FFFFFFF6h
 
 ### 6. Problem (문제)
 
-**Q. Given the number 456789ABh, list out its byte values in little-endian order.**
+** Q. Given the number 456789ABh, list out its byte values in little-endian order. **
 (16진수 숫자 456789ABh가 주어졌을 때, 리틀 엔디안(Little-endian) 순서대로 바이트 값들을 나열하세요.)
 
 ---
