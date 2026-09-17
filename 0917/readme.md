@@ -2,7 +2,7 @@
 
 > **어셈블리 언어 기초(Assembly Language Fundamentals)** 핵심 내용을 세부 항목별로 정돈하여 요약한 자료입니다.
 
----
+
 
 ## 📌 1. 기본 언어 요소 (Basic Language Elements)
 
@@ -58,7 +58,7 @@ main PROC
     INVOKE ExitProcess, 0 ; 프로그램 종료 (운영체제로 제어 반환)
 main ENDP
 END main
-
+---
 ### 📂 세그먼트 구조 (Segment Structure)
 
 | 세그먼트 | 영역 설명 |
@@ -118,7 +118,7 @@ END main
 ```assembly
 list BYTE 10, 20, 30, 40
 ListSize = ($ - list)        ; ListSize = 4
-
+---
 ### (2) `EQU` 지시자
 * 정수 식, 기호, 텍스트 등을 상수에 바인딩하며, **재정의가 불가능**합니다.
 
@@ -126,10 +126,11 @@ ListSize = ($ - list)        ; ListSize = 4
 PI EQU <3.1416>
 pressKey EQU <"Press any key to continue...", 0>
 
-
+---
 ### (3) `TEXTEQU` 지시자
 * 텍스트 매크로를 생성하여 코드 표현을 치환할 수 있습니다.
 
 ```assembly
 move TEXTEQU <mov>
 setupAL TEXTEQU <move al, 10>
+---
