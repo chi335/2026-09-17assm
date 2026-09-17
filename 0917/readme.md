@@ -1,7 +1,19 @@
+<a id="top"></a>
+
 # 💻 3. Assembly Language Fundamentals
+---
+
+## 📑 목차 (Table of Contents)
+
+1. [📌 1. 기본 언어 요소 (Basic Language Elements)](#sec-1)
+2. [🛠️ 2. 어셈블리 프로그램의 기본 구조 및 예제](#sec-2)
+3. [🔄 3. 어셈블, 링크 및 실행 (Assemble-Link-Execute Cycle)](#sec-3)
+4. [📊 4. 데이터 정의 (Defining Data)](#sec-4)
+5. [🔑 5. 기호 상수 (Symbolic Constants)](#sec-5)
 
 ---
 
+<a id="sec-1"></a>
 ## 📌 1. 기본 언어 요소 (Basic Language Elements)
 
 ### (1) 명령어(Instruction) vs 지시자(Directive)
@@ -30,8 +42,11 @@
 * **블록 주석**: `COMMENT ! ... !` 또는 `COMMENT & ... &` 사용.
 * **NOP (No Operation)**: 1바이트 크기의 명령어로, 아무 작업도 수행하지 않지만 메모리 주소 정렬(Alignment)을 통해 연산 속도를 최적화할 때 사용됩니다.
 
+[🔝 맨 위로 이동](#top)
+
 ---
 
+<a id="sec-2"></a>
 ## 🛠️ 2. 어셈블리 프로그램의 기본 구조 및 예제
 
 ```assembly
@@ -57,16 +72,22 @@ END main
 | **`.code`** | 실행 가능한 명령어가 위치하는 코드 영역 |
 | **`.stack`** | 런타임 스택 영역 |
 
+[🔝 맨 위로 이동](#top)
+
 ---
 
+<a id="sec-3"></a>
 ## 🔄 3. 어셈블, 링크 및 실행 (Assemble-Link-Execute Cycle)
 
 1. **Source File (`.asm`)**: 어셈블리 언어로 작성된 소스 코드
 2. **Assembler (MASM)**: 소스 코드를 기계어 오브젝트 파일(`.obj`)로 변환하고 리스팅 파일(`.lst`) 생성 가능
 3. **Linker**: 오브젝트 파일과 라이브러리를 결합하여 최종 실행 파일(`.exe`) 생성
 
+[🔝 맨 위로 이동](#top)
+
 ---
 
+<a id="sec-4"></a>
 ## 📊 4. 데이터 정의 (Defining Data)
 
 ### (1) 주요 내장 데이터 타입 (Intrinsic Data Types)
@@ -92,8 +113,11 @@ END main
 * **Little-Endian (리틀 엔디안)**: Intel x86 계열 CPU에서 사용하며, **하위 바이트(LSB)를 낮은 메모리 주소**에 저장합니다. (산술 연산 최적화)
 * **Big-Endian (빅 엔디안)**: 상위 바이트(MSB)를 낮은 메모리 주소에 저장합니다. (네트워크 전송 표준)
 
+[🔝 맨 위로 이동](#top)
+
 ---
 
+<a id="sec-5"></a>
 ## 🔑 5. 기호 상수 (Symbolic Constants)
 
 상수 이름에 값을 바인딩하여 코드의 가독성과 유지보수성을 높입니다.
@@ -122,3 +146,5 @@ pressKey EQU <"Press any key to continue...", 0>
 move TEXTEQU <mov>
 setupAL TEXTEQU <move al, 10>
 ```
+
+[🔝 맨 위로 이동](#top)
