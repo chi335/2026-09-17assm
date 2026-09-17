@@ -2,43 +2,34 @@
 
 > **어셈블리 언어 기초(Assembly Language Fundamentals)** 핵심 내용을 세부 항목별로 정돈하여 요약한 자료입니다.
 
-
+---
 
 ## 📌 1. 기본 언어 요소 (Basic Language Elements)
 
 ### (1) 명령어(Instruction) vs 지시자(Directive)
-* **Instruction (명령어)**: CPU가 실제 실행하는 행동 지침입니다.
-  * 예: `MOV`, `ADD`, `SUB`, `NOP` 등
-* **Directive (지시자)**: 어셈블러(Assembler)에게 프로그램 구조나 메모리 할당 방식을 안내하는 지시서입니다.
-  * 예: `.data`, `.code`, `PROC`, `ENDP` 등
+* **Instruction (명령어)**: CPU가 실제 실행하는 행동 지침입니다 (예: `MOV`, `ADD`, `SUB`, `NOP` 등).
+* **Directive (지시자)**: 어셈블러(Assembler)에게 프로그램 구조나 메모리 할당 방식을 안내하는 지시서입니다 (예: `.data`, `.code`, `PROC`, `ENDP` 등).
 
 ### (2) 리터럴 (Literals)
 * **정수 리터럴 (Integer Literals)**: 숫자 뒤에 진법 접미사(Radix)를 붙여 표현합니다.
   * `26` / `26d` : 10진수
   * `11010011b` : 2진수
   * `42q` / `42o` : 8진수
-  * `1Ah` / `0A3h` : 16진수 (첫 글자가 문자인 경우 식별자와 구분하기 위해 맨 앞에 `0`을 추가)
+  * `1Ah` / `0A3h` : 16진수 (첫 글자가 문자인 경우 맨 앞에 `0`을 붙여 식별자와 구분)
 * **실수 리터럴 (Real Number Literals)**: IEEE 754 부동소수점 표준 방식을 사용합니다.
   * 32비트 float 기준: **부호 비트($S$, 1bit)** + **지수부($E$, 8bit)** + **가수부($M$, 23bit)**
 * **문자 및 문자열 리터럴**: 홑따옴표(`'`) 또는 쌍따옴표(`"`)를 사용해 정의하며, 문자열 끝에는 `0` (NUL)을 붙여 마감하기도 합니다.
 
 ### (3) 상수 정수식 (Constant Integer Expressions)
-* **연산자 우선순위**: 
-  1. `( )`
-  2. Unary `+`, `-`
-  3. `*`, `/`, `MOD`
-  4. Binary `+`, `-`
+* **연산자 우선순위**: `( )` (1순위) $\rightarrow$ Unary `+`, `-` (2순위) $\rightarrow$ `*`, `/`, `MOD` (3순위) $\rightarrow$ `+`, `-` (4순위)
 
 ### (4) 식별자 (Identifiers) 및 예약어 (Reserved Words)
-* **식별자 규칙**:
-  * 대소문자를 구분하지 않음
-  * 1~247자 길이 제한
-  * 첫 글자는 영문자, `_`, `@`, `?`, `$`만 가능
-* **예약어**: 레지스터 이름, 명령어 이름(`MOV`, `ADD` 등), 지시자, 데이터 타입(`BYTE`, `WORD` 등)은 식별자로 사용할 수 없습니다.
+* **식별자 규칙**: 대소문자를 구분하지 않으며, 1~247자 길이를 가집니다. 첫 글자는 영문자, `_`, `@`, `?`, `$`만 가능합니다.
+* **예약어**: 레지스터 이름, 명령어 이름(MOV, ADD 등), 지시자, 데이터 타입(BYTE, WORD 등)은 식별자로 사용할 수 없습니다.
 
 ### (5) 주석 (Comments) & NOP
-* **한 줄 주석**: 세미콜론(`;`) 사용
-* **블록 주석**: `COMMENT ! ... !` 또는 `COMMENT & ... &` 사용
+* **한 줄 주석**: 세미콜론(`;`) 사용.
+* **블록 주석**: `COMMENT ! ... !` 또는 `COMMENT & ... &` 사용.
 * **NOP (No Operation)**: 1바이트 크기의 명령어로, 아무 작업도 수행하지 않지만 메모리 주소 정렬(Alignment)을 통해 연산 속도를 최적화할 때 사용됩니다.
 
 ---
@@ -58,7 +49,8 @@ main PROC
     INVOKE ExitProcess, 0 ; 프로그램 종료 (운영체제로 제어 반환)
 main ENDP
 END main
----
+```
+
 ### 📂 세그먼트 구조 (Segment Structure)
 
 | 세그먼트 | 영역 설명 |
@@ -67,16 +59,13 @@ END main
 | **`.code`** | 실행 가능한 명령어가 위치하는 코드 영역 |
 | **`.stack`** | 런타임 스택 영역 |
 
-
 ---
 
-#### 💡 실제 적용 예시 (기본 순서형)
+## 🔄 3. 어셈블, 링크 및 실행 (Assemble-Link-Execute Cycle)
 
-> ## 🔄 3. 어셈블, 링크 및 실행 (Assemble-Link-Execute Cycle)
->
-> 1. **Source File (`.asm`)**: 어셈블리 언어로 작성된 소스 코드
-> 2. **Assembler (MASM)**: 소스 코드를 기계어 오브젝트 파일(`.obj`)로 변환하고 리스팅 파일(`.lst`) 생성 가능
-> 3. **Linker**: 오브젝트 파일과 라이브러리를 결합하여 최종 실행 파일(`.exe`) 생성
+1. **Source File (`.asm`)**: 어셈블리 언어로 작성된 소스 코드
+2. **Assembler (MASM)**: 소스 코드를 기계어 오브젝트 파일(`.obj`)로 변환하고 리스팅 파일(`.lst`) 생성 가능
+3. **Linker**: 오브젝트 파일과 라이브러리를 결합하여 최종 실행 파일(`.exe`) 생성
 
 ---
 
@@ -105,8 +94,8 @@ END main
 * **Little-Endian (리틀 엔디안)**: Intel x86 계열 CPU에서 사용하며, **하위 바이트(LSB)를 낮은 메모리 주소**에 저장합니다. (산술 연산 최적화)
 * **Big-Endian (빅 엔디안)**: 상위 바이트(MSB)를 낮은 메모리 주소에 저장합니다. (네트워크 전송 표준)
 
-
 ---
+
 ## 🔑 5. 기호 상수 (Symbolic Constants)
 
 상수 이름에 값을 바인딩하여 코드의 가독성과 유지보수성을 높입니다.
@@ -118,19 +107,20 @@ END main
 ```assembly
 list BYTE 10, 20, 30, 40
 ListSize = ($ - list)        ; ListSize = 4
----
+```
+
 ### (2) `EQU` 지시자
 * 정수 식, 기호, 텍스트 등을 상수에 바인딩하며, **재정의가 불가능**합니다.
 
 ```assembly
 PI EQU <3.1416>
 pressKey EQU <"Press any key to continue...", 0>
+```
 
----
 ### (3) `TEXTEQU` 지시자
 * 텍스트 매크로를 생성하여 코드 표현을 치환할 수 있습니다.
 
 ```assembly
 move TEXTEQU <mov>
 setupAL TEXTEQU <move al, 10>
----
+```
