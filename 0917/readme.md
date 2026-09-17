@@ -1,7 +1,5 @@
 # 💻 3. Assembly Language Fundamentals
 
-> **어셈블리 언어 기초(Assembly Language Fundamentals)** 핵심 내용을 세부 항목별로 정돈하여 요약한 자료입니다.
-
 ---
 
 ## 📌 1. 기본 언어 요소 (Basic Language Elements)
