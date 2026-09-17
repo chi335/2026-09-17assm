@@ -486,7 +486,7 @@ target:   MOV   EAX, 1   ; EAX 레지스터에 1을 대입
 
 ---
 
-### 1. Problem (문제)
+### 15. Problem (문제)
 
 **Q. (True/False): A code label is followed by a colon (:), but a data label does not end with a colon.**
 (참/거짓: 코드 라벨은 뒤에 콜론(:)이 붙지만, 데이터 라벨은 콜론으로 끝나지 않는다.)
@@ -507,3 +507,73 @@ target:   MOV   EAX, 1   ; EAX 레지스터에 1을 대입
 **정답: True (참)**
 
 * **이유:** standard MASM 어셈블리 규칙상, 실행 코드 섹션에서 사용하는 **코드 라벨은 라벨명 뒤에 콜론(`:`)**을 붙여 선언하지만, 변수를 선언하는 **데이터 라벨은 콜론 없이** 타입 지정자(`BYTE`, `DWORD` 등)와 함께 선언합니다.
+
+
+
+---
+
+### 16. Problem (문제)
+
+**Q. Show an example of a block comment.**
+(블록 주석(여러 줄 주석)의 예시를 보여주세요.)
+
+---
+
+### 2. Problem Solving (문제 풀이)
+
+* **핵심 개념:**
+  * **단일 행 주석 (Single-line comment):** 세미콜론(`;`)을 사용하여 해당 줄만 주석으로 처리합니다.
+  * **블록 주석 (Block comment):** 여러 줄에 걸친 주석을 작성할 때 사용합니다.
+* **MASM 어셈블리 문법:**
+  * MASM 어셈블리에서는 **`COMMENT` 지시어**와 **사용자가 지정한 구분자(Delimiter문자, 예: `!`, `%`, `&` 등)**를 사용하여 블록 주석을 작성합니다.
+  * `COMMENT` 뒤에 오는 첫 번째 문자가 구분자가 되며, 동일한 문자가 다시 나올 때까지의 모든 내용(여러 줄)이 주석으로 처리됩니다.
+
+---
+
+### 3. Answer (정답)
+
+**어셈블리 언어 블록 주석 예시:**
+
+```assembly
+COMMENT !
+    This is a block comment.
+    It can span multiple lines.
+    Assembler ignores everything inside this block.
+!```
+
+
+---
+
+
+### 17. Problem (문제)
+
+**Q. Why is it not a good idea to use numeric addresses when writing instructions that access variables?**
+(변수에 접근하는 명령어를 작성할 때 숫자 메모리 주소(Numeric addresses)를 직접 사용하는 것이 좋은 방법이 아닌 이유는 무엇인가요?)
+
+---
+
+### 2. Problem Solving (문제 풀이)
+
+* **핵심 개념:**
+  * **숫자 주소(Direct Numeric Address):** `MOV EAX, [00404000h]` 처럼 실제 메모리 오프셋/주소 숫자를 직접 명시하는 방식입니다.
+  * **상징적 라벨(Symbolic Label / 변수명):** `MOV EAX, myVar` 처럼 주소 대신 변수 이름을 사용하는 방식입니다.
+* **숫자 주소를 직접 쓸 때 발생하는 문제점:**
+  1. **유지보수의 어려움:** 코드나 데이터 영역에 새로운 변수를 추가하거나 삭제하면 뒤따르는 변수들의 메모리 주소가 모두 이동하게 되어, 하드코딩된 숫자 주소를 일일이 수정해야 합니다.
+  2. **재배치(Relocation) 및 가상 메모리 문제:** 프로그램이 메모리에 로드될 때 매번 동일한 절대 주소에 로드된다는 보장이 없으므로, 하드코딩된 주소는 오류(Crash)를 일으킬 수 있습니다.
+  3. **가독성 저하:** 숫자 주소만 봐서는 해당 주소에 어떤 데이터가 들어있는지 의미를 파악하기 어렵습니다.
+
+---
+
+### 3. Answer (정답)
+
+**이유 (Key Reasons):**
+
+1. **코드 변경 및 유지보수의 어려움 (Code Modification & Maintenance):**
+   * 새로운 변수나 코드가 추가/삭제될 때마다 메모리 배치가 달라지므로, 직접 하드코딩한 모든 숫자 주소를 사람이 수동으로 찾아서 수정해야 합니다.
+
+2. **메모리 재배치 문제 (Address Relocation):**
+   * 운영체제가 프로그램을 실행할 때 메모리의 어느 위치(주소)에 로드할지 매번 달라질 수 있으므로, 고정된 숫자 주소를 사용하면 잘못된 메모리에 접근하게 됩니다.
+
+3. **가독성 및 오류 방지 (Readability & Error Prevention):**
+   * 변수 이름(Symbolic Label)을 사용하면 어셈블러와 링크가 주소 계산을 자동으로 처리해 주며, 코드의 의미를 파악하기 쉽고 주소 계산 실수를 방지할 수 있습니다.
+
