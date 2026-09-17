@@ -578,3 +578,421 @@ COMMENT !
    * 변수 이름(Symbolic Label)을 사용하면 어셈블러와 링크가 주소 계산을 자동으로 처리해 주며, 코드의 의미를 파악하기 쉽고 주소 계산 실수를 방지할 수 있습니다.
 
 
+
+---
+
+### 18. Problem (문제)
+
+**Q. What type of argument must be passed to the ExitProcess procedure?**
+(ExitProcess 프로시저에 전달해야 하는 인자(Argument)의 타입은 무엇인가요?)
+
+---
+
+### 2. Problem Solving (문제 풀이)
+
+* **핵심 개념:**
+  * **`ExitProcess`:** Windows API 함수 중 하나로, 현재 실행 중인 어셈블리 프로그램을 정상적으로 종료하고 운영체제(OS)로 제어를 반환하는 역할을 합니다.
+  * **전달 인자 (Return/Exit Code):** 
+    * `ExitProcess`는 프로그램이 종료될 때 OS에 전달할 **종료 코드(Return Code / Exit Code)**를 인자로 받습니다.
+    * 이 종료 코드는 **32비트 정수 타입(DWORD 또는 UINT)**이어야 합니다.
+    * 일반적으로 정상 종료 시 `0`을 전달하며, 오류가 발생했을 때는 0이 아닌 에러 코드를 전달합니다.
+
+---
+
+### 3. Answer (정답)
+
+**정답: 32비트 정수 (DWORD / 32-bit integer / UINT / Return code)**
+
+* **상세 설명:** `ExitProcess` 프로시저는 프로그램의 종료 상태를 나타내는 **32비트 무부호 정수(DWORD / doubleword)** 값(일반적으로 정상 종료를 의미하는 `0`)을 인자로 요구합니다.
+
+---
+
+**💡 예시 코드 (MASM 기준):**
+```assembly
+INVOKE ExitProcess, 0   ; 0(DWORD)을 인자로 전달하여 프로그램 정상 종료
+```
+
+
+---
+### 19. Problem (문제)
+
+**Q. Which directive ends a procedure?**
+(프로시저(Procedure)를 종료하는 지시어(Directive)는 무엇인가요?)
+
+---
+
+### 2. Problem Solving (문제 풀이)
+
+* **핵심 개념:**
+  * **프로시저 (Procedure):** 다른 고수준 언어의 '함수(Function)'나 '메소드(Method)'에 해당하는 어셈블리 언어의 블록 단위입니다.
+  * **선언 구조:**
+    * 프로시저의 **시작**: `PROC` 지시어를 사용합니다.
+    * 프로시저의 **끝**: **`ENDP`** 지시어를 사용합니다. (`END Procedure`의 약자)
+
+---
+
+### 3. Answer (정답)
+
+**정답: ENDP**
+
+* **설명:** 어셈블리 언어(MASM)에서 프로시저의 끝을 정의할 때는 **`ENDP`** 지시어를 사용합니다.
+
+---
+
+**💡 예시 코드:**
+```assembly
+main PROC          ; main 프로시저 시작
+    ; 실행할 코드...
+    exit
+main ENDP          ; main 프로시저 종료 (ENDP 사용)
+```
+
+
+---
+
+### 20. Problem (문제)
+
+**Q. In 32-bit mode, what is the purpose of the identifier in the END directive?**
+(32비트 모드에서 END 지시어 뒤에 붙는 식별자(Identifier)의 목적은 무엇인가요?)
+
+---
+
+### 2. Problem Solving (문제 풀이)
+
+* **핵심 개념:**
+  * **`END` 지시어:** 어셈블리 소스 파일의 맨 마지막 줄에 작성하여 어셈블러에게 파일의 끝임을 알립니다.
+  * **`END` 뒤의 식별자(Identifier):** 보통 `END main`과 같이 작성합니다.
+* **식별자의 역할:**
+  * 이 식별자는 프로그램이 로드되어 실행될 때 **가장 먼저 실행을 시작할 지점(Entry Point, 엔트리 포인트)**이 되는 프로시저의 이름을 운영체제와 링커(Linker)에게 알려주는 역할을 합니다.
+
+---
+
+### 3. Answer (정답)
+
+**정답: 프로그램의 시작점(Entry Point)을 지정하기 위해 사용합니다.**
+
+* **상세 설명:** `END main`과 같이 `END` 지시어 뒤에 작성된 식별자는 프로그램이 실행될 때 최초로 제어가 전달되어 실행을 시작할 **진입점/시작점(Entry Point)** 프로시저를 지정해 줍니다.
+
+---
+
+**💡 예시 코드:**
+```assembly
+main PROC
+    ; 프로그램 실행 코드...
+    INVOKE ExitProcess, 0
+main ENDP
+
+END main    ; 'main' 프로시저가 프로그램의 시작점(Entry Point)임을 지정
+```
+
+
+---
+
+### 21. Problem (문제)
+
+**Q. What is the purpose of the PROTO directive?**
+(PROTO 지시어의 목적은 무엇인가요?)
+
+---
+
+### 2. Problem Solving (문제 풀이)
+
+* **핵심 개념:**
+  * **`PROTO` (Prototype):** C/C++ 언어의 '함수 선언(Function Prototype)'과 동일한 역할을 하는 어셈블리 지시어입니다.
+  * **주요 역할:**
+    1. 어셈블러에게 **호출할 프로시저(함수)의 이름, 매개변수(Parameter)의 개수 및 타입**을 미리 알려줍니다.
+    2. **`INVOKE` 지시어**를 사용하여 프로시저를 호출할 때, 전달하는 인자(Argument)가 올바른 타입과 개수인지 어셈블러가 **타입 검사(Type Checking)**를 할 수 있게 도와줍니다.
+
+---
+
+### 3. Answer (정답)
+
+**정답: 프로시저의 프로토타입(선언부)을 정의하여 `INVOKE` 호출 시 매개변수의 개수와 타입을 검사할 수 있도록 하기 위해서입니다.**
+
+* **상세 설명:** `PROTO` 지시어는 외부 함수(예: Windows API)나 나중에 정의될 프로시저의 이름과 매개변수 리스트를 미리 선언함으로써, 어셈블러가 `INVOKE` 명령을 처리할 때 인자 타입을 검사하고 적절한 호출 코드를 생성할 수 있게 해줍니다.
+
+---
+
+**💡 예시 코드:**
+```assembly
+; ExitProcess 프로시저의 프로토타입 선언 (ExitCode라는 DWORD 매개변수 1개를 받음)
+ExitProcess PROTO, dwExitCode:DWORD
+
+.code
+main PROC
+    ; PROTO 선언 덕분에 ExitProcess 호출 시 매개변수 검증 가능
+    INVOKE ExitProcess, 0
+main ENDP
+```
+
+
+---
+
+
+---
+
+### 22. Problem (문제)
+
+**Q. (True/False): An Object file is produced by the Linker.**
+(참/거짓: 오브젝트 파일(Object file, .obj)은 링커(Linker)에 의해 생성된다.)
+
+---
+
+### 2. Problem Solving (문제 풀이)
+
+* **핵심 개념:**
+  * **어셈블러 (Assembler):** 소스 코드(`.asm`)를 번역하여 **오브젝트 파일(`.obj`)**을 생성합니다.
+  * **링커 (Linker):** 하나 이상의 오브젝트 파일(`.obj`)과 라이브러리(`.lib`)들을 결합하여 최종 **실행 파일(`.exe`)**을 생성합니다.
+
+---
+
+### 3. Answer (정답)
+
+**정답: False (거짓)**
+
+* **이유:** 오브젝트 파일(`.obj`)을 생성하는 것은 **어셈블러(Assembler)**입니다. 링커(Linker)는 이렇게 생성된 오브젝트 파일들을 묶어서 **실행 파일(Executable file, `.exe`)**을 만들어냅니다.
+
+---
+
+**💡 빌드 과정 요약:**
+```text
+[ 소스 코드 (.asm) ] 
+       │
+       ▼ (어셈블러가 변환)
+[ 오브젝트 파일 (.obj) ] 
+       │
+       ▼ (링커가 결합)
+[ 실행 파일 (.exe) ]
+```
+
+
+---
+
+### 23. Problem (문제)
+
+**Q. (True/False): A Listing file is produced by the Assembler.**
+(참/거짓: 리스팅 파일(Listing file, .lst)은 어셈블러(Assembler)에 의해 생성된다.)
+
+---
+
+### 2. Problem Solving (문제 풀이)
+
+* **핵심 개념:**
+  * **리스팅 파일 (Listing file, `.lst`):** 어셈블리 소스 코드, 대응하는 기계어 16진수 바이트, 메모리 오프셋 주소, 기호 테이블(Symbol Table) 등을 한눈에 볼 수 있도록 나열한 텍스트 파일입니다.
+  * **생성 주체:** 소스 파일(`.asm`)을 어셈블(번역)할 때 옵션(예: `/Fl`)을 주면 **어셈블러(Assembler)**가 오브젝트 파일과 함께 리스팅 파일을 생성해 줍니다.
+
+---
+
+### 3. Answer (정답)
+
+**정답: True (참)**
+
+* **이유:** 리스팅 파일(`.lst`)은 **어셈블러(Assembler)**가 소스 코드를 기계어로 번역하는 과정에서 생성하며, 코드의 메모리 주소 및 기계어 변환 결과를 확인할 수 있는 상세 보고서 역할을 합니다.
+
+
+---
+
+### 24. Problem (문제)
+
+**Q. (True/False): A link library is added to a program just before producing an Executable file.**
+(참/거짓: 링크 라이브러리(Link library)는 실행 파일(Executable file)이 생성되기 바로 직전에 프로그램에 추가된다.)
+
+---
+
+### 2. Problem Solving (문제 풀이)
+
+* **핵심 개념:**
+  * **링크 라이브러리 (Link Library, `.lib`):** 자주 사용되는 공통 프로시저(함수)들이 미리 컴파일되어 모여 있는 파일입니다.
+  * **빌드 과정 (Link Stage):**
+    1. 어셈블러가 소스 코드(`.asm`)를 오브젝트 파일(`.obj`)로 변환합니다.
+    2. **링커(Linker)**가 오브젝트 파일과 필요한 **링크 라이브러리(`.lib`)**들을 하나로 결합(Link)합니다.
+    3. 결합이 완료되면 최종 **실행 파일(`.exe`)**이 생성됩니다.
+* **해석:** 링크 라이브러리가 연결(추가)되는 시점은 링킹 과정, 즉 최종 실행 파일(`.exe`)이 만들어지기 바로 직전 단계가 맞습니다.
+
+---
+
+### 3. Answer (정답)
+
+**정답: True (참)**
+
+* **이유:** 링킹(Linking) 단계에서 링커(Linker)가 오브젝트 파일(`.obj`)에 필요한 링크 라이브러리(`.lib`) 코드를 결합한 뒤, 그 최종 결과물로 실행 파일(`.exe`)을 만들어내기 때문에 참입니다.
+
+
+---
+
+### 25. Problem (문제)
+
+**Q. Which data directive creates a 32-bit signed integer variable?**
+(32비트 부호 있는 정수(Signed integer) 변수를 생성하는 데이터 지시어는 무엇인가요?)
+
+---
+
+### 2. Problem Solving (문제 풀이)
+
+* **핵심 개념:**
+  * **어셈블리(MASM) 정수 데이터 타입 지시어:**
+    * `BYTE` / `SBYTE`: 8비트 정수 (Unsigned / Signed)
+    * `WORD` / `SWORD`: 16비트 정수 (Unsigned / Signed)
+    * **`DWORD` / `SDWORD`**: 32비트 정수 (Unsigned / Signed)
+    * `QWORD` / `SQWORD`: 64비트 정수 (Unsigned / Signed)
+* **부호 있는(Signed) 32비트 정수:**
+  * **`SDWORD`** (Signed Doubleword) 지시어가 32비트 부호 있는 정수 변수를 명시적으로 선언할 때 사용됩니다.
+
+---
+
+### 3. Answer (정답)
+
+**정답: SDWORD**
+
+* **설명:** **`SDWORD`** (Signed Doubleword) 지시어가 32비트 크기의 부호 있는 정수(Signed Integer) 변수를 정의하는 데 사용됩니다. (참고: 일반 `DWORD`도 32비트 메모리를 할당하지만, '부호 있음'을 명시적으로 나타낼 때는 `SDWORD`를 사용합니다.)
+
+---
+
+**💡 예시 코드:**
+```assembly
+.data
+val1 SDWORD -123456    ; 32비트 부호 있는 정수 변수 선언
+```
+
+
+---
+
+### 26. Problem (문제)
+
+**Q. Which data directive creates a 16-bit signed integer variable?**
+(16비트 부호 있는 정수(Signed integer) 변수를 생성하는 데이터 지시어는 무엇인가요?)
+
+---
+
+### 2. Problem Solving (문제 풀이)
+
+* **핵심 개념:**
+  * **어셈블리(MASM) 정수 데이터 타입 지시어:**
+    * `BYTE` / `SBYTE`: 8비트 정수 (Unsigned / Signed)
+    * **`WORD` / `SWORD`**: 16비트 정수 (Unsigned / Signed)
+    * `DWORD` / `SDWORD`: 32비트 정수 (Unsigned / Signed)
+* **부호 있는(Signed) 16비트 정수:**
+  * **`SWORD`** (Signed Word) 지시어가 16비트 부호 있는 정수 변수를 명시적으로 선언할 때 사용됩니다.
+
+---
+
+### 3. Answer (정답)
+
+**정답: SWORD**
+
+* **설명:** **`SWORD`** (Signed Word) 지시어가 16비트 크기의 부호 있는 정수(Signed Integer) 변수를 정의하는 데 사용됩니다.
+
+---
+
+**💡 예시 코드:**
+```assembly
+.data
+var1 SWORD -32700    ; 16비트 부호 있는 정수 변수 선언
+```
+
+
+---
+
+### 27. Problem (문제)
+
+**Q. Which data directive creates a 64-bit unsigned integer variable?**
+(64비트 부호 없는 정수(Unsigned integer) 변수를 생성하는 데이터 지시어는 무엇인가요?)
+
+---
+
+### 2. Problem Solving (문제 풀이)
+
+* **핵심 개념:**
+  * **어셈블리(MASM) 데이터 크기 구분:**
+    * `BYTE`: 8비트 (1 바이트)
+    * `WORD`: 16비트 (2 바이트)
+    * `DWORD` (Doubleword): 32비트 (4 바이트)
+    * **`QWORD`** (Quadword): 64비트 (8 바이트)
+* **부호 없는(Unsigned) 64비트 정수:**
+  * **`QWORD`** 지시어가 64비트 크기의 부호 없는 정수 변수를 선언할 때 사용됩니다. (부호 있는 64비트 정수는 `SQWORD` 사용)
+
+---
+
+### 3. Answer (정답)
+
+**정답: QWORD**
+
+* **설명:** **`QWORD`** (Quadword) 지시어가 64비트(8바이트) 크기의 부호 없는 정수(Unsigned Integer) 변수를 정의하는 데 사용됩니다.
+
+---
+
+**💡 예시 코드:**
+```assembly
+.data
+val1 QWORD 1234567890ABCDEFh    ; 64비트 부호 없는 정수 변수 선언
+```
+
+
+---
+
+### 28. Problem (문제)
+
+**Q. Which data directive creates an 8-bit signed integer variable?**
+(8비트 부호 있는 정수(Signed integer) 변수를 생성하는 데이터 지시어는 무엇인가요?)
+
+---
+
+### 2. Problem Solving (문제 풀이)
+
+* **핵심 개념:**
+  * **어셈블리(MASM) 정수 데이터 타입 지시어:**
+    * **`BYTE` / `SBYTE`**: 8비트 정수 (Unsigned / Signed)
+    * `WORD` / `SWORD`: 16비트 정수 (Unsigned / Signed)
+    * `DWORD` / `SDWORD`: 32비트 정수 (Unsigned / Signed)
+* **부호 있는(Signed) 8비트 정수:**
+  * **`SBYTE`** (Signed Byte) 지시어가 8비트 부호 있는 정수 변수를 명시적으로 선언할 때 사용됩니다.
+
+---
+
+### 3. Answer (정답)
+
+**정답: SBYTE**
+
+* **설명:** **`SBYTE`** (Signed Byte) 지시어가 8비트(1바이트) 크기의 부호 있는 정수(Signed Integer) 변수를 정의하는 데 사용됩니다.
+
+---
+
+**💡 예시 코드:**
+```assembly
+.data
+val1 SBYTE -128    ; 8비트 부호 있는 정수 변수 선언 (-128 ~ 127 범위)
+```
+
+
+---
+
+### 29. Problem (문제)
+
+**Q. Which data directive creates a 10-byte packed BCD variable?**
+(10바이트 압축 BCD(Packed BCD) 변수를 생성하는 데이터 지시어는 무엇인가요?)
+
+---
+
+### 2. Problem Solving (문제 풀이)
+
+* **핵심 개념:**
+  * **BCD (Binary Coded Decimal, 2진화 십진법):** 10진수 숫자 하나를 4비트로 표현하는 방식입니다.
+  * **10바이트 데이터 크기:** 80비트(10바이트) 메모리 공간을 할당합니다.
+  * **데이터 지시어:**
+    * **`TBYTE`** (Ten Bytes) 지시어는 10바이트(80비트) 정수 또는 **압축 BCD(Packed BCD)** 변수를 정의할 때 사용합니다. (구버전 MASM 표현식인 **`DT`** 도 동일한 역할을 합니다.)
+
+---
+
+### 3. Answer (정답)
+
+**정답: TBYTE (또는 DT)**
+
+* **설명:** **`TBYTE`** (Ten Bytes) 지시어가 10바이트(80비트) 크기의 압축 BCD(Packed BCD) 데이터 변수를 생성하는 데 사용됩니다.
+
+---
+
+**💡 예시 코드:**
+```assembly
+.data
+bcdVal TBYTE 12345678901234567890h    ; 10바이트 압축 BCD 변수 선언
+```
