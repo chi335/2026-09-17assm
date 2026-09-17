@@ -539,12 +539,12 @@ COMMENT !
     This is a block comment.
     It can span multiple lines.
     Assembler ignores everything inside this block.
-!```
+!
+```
+
 
 
 ---
-
-
 ### 17. Problem (문제)
 
 **Q. Why is it not a good idea to use numeric addresses when writing instructions that access variables?**
@@ -576,4 +576,5 @@ COMMENT !
 
 3. **가독성 및 오류 방지 (Readability & Error Prevention):**
    * 변수 이름(Symbolic Label)을 사용하면 어셈블러와 링크가 주소 계산을 자동으로 처리해 주며, 코드의 의미를 파악하기 쉽고 주소 계산 실수를 방지할 수 있습니다.
+
 
